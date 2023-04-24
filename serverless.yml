@@ -1,0 +1,16 @@
+app: print-puz-test
+service: print-puz-test
+frameworkVersion: '3'
+org: taylorjg
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
