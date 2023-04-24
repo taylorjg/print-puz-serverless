@@ -9,6 +9,7 @@
   "author": "Jonathan Taylor",
   "license": "MIT",
   "dependencies": {
+    "@confuzzle/readpuz": "^1.2.3",
     "axios": "^1.3.6"
   },
   "devDependencies": {

@@ -1,31 +1,30 @@
 import axios from "axios";
+import { readpuz } from "@confuzzle/readpuz"
+
+const PRIVATE_EYE_WEBSITE_URL = "https://www.private-eye.co.uk";
 
 const scrapePuzzleUrl = async () => {
   try {
-    const response = await axios.get("http://www.private-eye.co.uk/crossword");
+    const response = await axios.get(`${PRIVATE_EYE_WEBSITE_URL}/crossword`);
     const data = response.data;
     const regex = /(pictures\/crossword\/download\/[\d]+\.puz)/;
     const match = regex.exec(data);
     return match
-      ? `http://www.private-eye.co.uk/${match[1]}`
+      ? `${PRIVATE_EYE_WEBSITE_URL}/${match[1]}`
       : null;
   } catch (error) {
     return error.message;
   }
 };
 
+const parsePuzzle = async (url) => {
+  const config = { responseType: "arraybuffer" };
+  const response = await axios.get(url, config);
+  return readpuz(response.data);
+};
+
 export async function handler(event) {
   const puzzleUrl = await scrapePuzzleUrl();
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v3.0! Your function executed successfully!",
-        puzzleUrl,
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+  const puzzle = await parsePuzzle(puzzleUrl);
+  return { puzzleUrl, puzzle };
 }
