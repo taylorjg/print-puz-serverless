@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 const scrapePuzzleUrl = async () => {
   try {
@@ -14,7 +14,7 @@ const scrapePuzzleUrl = async () => {
   }
 };
 
-module.exports.handler = async (event) => {
+export async function handler(event) {
   const puzzleUrl = await scrapePuzzleUrl();
   return {
     statusCode: 200,
@@ -28,4 +28,4 @@ module.exports.handler = async (event) => {
       2
     ),
   };
-};
+}
