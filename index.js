@@ -23,8 +23,21 @@ const parsePuzzle = async (url) => {
   return readpuz(response.data);
 };
 
+const parseGrid = (state, size) => {
+  const grid = [];
+  let curr = 0;
+  for (;;) {
+    const line = state.slice(curr, curr + size);
+    grid.push(line);
+    curr += size;
+    if (curr >= size * size) break;
+  }
+  return grid;
+};
+
 export async function handler(event) {
   const puzzleUrl = await scrapePuzzleUrl();
   const puzzle = await parsePuzzle(puzzleUrl);
-  return { puzzleUrl, puzzle };
+  const grid = parseGrid(puzzle.state, puzzle.width);
+  return { puzzleUrl, puzzle, grid };
 }
