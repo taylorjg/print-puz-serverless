@@ -46,7 +46,7 @@ const parseGrid = (state, size) => {
   return grid;
 };
 
-const computeSquares = grid => {
+const computeNumberedSquares = grid => {
 
   const SIZE = grid.length;
 
@@ -59,7 +59,7 @@ const computeSquares = grid => {
 
   return grid.flatMap((gridLine, rowIndex) => {
     const chars = Array.from(gridLine);
-    return chars.map((char, colIndex) => {
+    return chars.flatMap((char, colIndex) => {
       const isLetter = char === MY_LETTER;
       const leftIsBlock = isBlock(rowIndex, colIndex - 1);
       const rightIsBlock = isBlock(rowIndex, colIndex + 1);
@@ -67,23 +67,23 @@ const computeSquares = grid => {
       const belowIsBlock = isBlock(rowIndex + 1, colIndex);
       const isAcrossClue = isLetter && leftIsBlock && !rightIsBlock;
       const isDownClue = isLetter && aboveIsBlock && !belowIsBlock;
-      const maybeClueNumber = isAcrossClue || isDownClue
-        ? { clueNumber: currentClueNumber++ }
-        : undefined;
-      return {
-        rowIndex,
-        colIndex,
-        isAcrossClue,
-        isDownClue,
-        ...maybeClueNumber,
-      };
+      if (isAcrossClue || isDownClue) {
+        return [{
+          rowIndex,
+          colIndex,
+          isAcrossClue,
+          isDownClue,
+          clueNumber: currentClueNumber++,
+        }];
+      } else {
+        return [];
+      }
     });
   });
 };
 
 const partitionClues = (grid, clues) => {
-  const squares = computeSquares(grid);
-  const numberedSquares = squares.filter(({ isAcrossClue, isDownClue }) => isAcrossClue || isDownClue);
+  const numberedSquares = computeNumberedSquares(grid);
 
   const seed = {
     clueIndex: 0,
@@ -92,8 +92,7 @@ const partitionClues = (grid, clues) => {
   };
 
   const finalAcc = numberedSquares.reduce((acc, square) => {
-    const { isAcrossClue, isDownClue, rowIndex, colIndex, clueNumber } = square;
-    if (!isAcrossClue && !isDownClue) return acc;
+    const { rowIndex, colIndex, isAcrossClue, isDownClue, clueNumber } = square;
     const acrossClues = isAcrossClue
       ? [{
         rowIndex,
@@ -112,8 +111,8 @@ const partitionClues = (grid, clues) => {
       : [];
     return {
       clueIndex: acc.clueIndex + acrossClues.length + downClues.length,
-      acrossClues: [...acc.acrossClues, ...acrossClues],
-      downClues: [...acc.downClues, ...downClues],
+      acrossClues: acc.acrossClues.concat(acrossClues),
+      downClues: acc.downClues.concat(downClues),
     };
   }, seed);
 
