@@ -120,10 +120,24 @@ const partitionClues = (grid, clues) => {
   return { acrossClues, downClues };
 };
 
-export async function handler(_event) {
+export async function handler(event, context, callback) {
   const puzzleUrl = await scrapePuzzleUrl();
   const puzzle = await parsePuzzle(puzzleUrl);
   const grid = parseGrid(puzzle.state, puzzle.width);
   const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
-  return { puzzleUrl, puzzle, grid, acrossClues, downClues };
+  const response = {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      puzzleUrl,
+      puzzle,
+      grid,
+      acrossClues,
+      downClues,
+    })
+  };
+  callback(null, response);
 }
