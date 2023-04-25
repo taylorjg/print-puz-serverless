@@ -3,6 +3,10 @@ import { readpuz } from "@confuzzle/readpuz"
 
 const PRIVATE_EYE_WEBSITE_URL = "https://www.private-eye.co.uk";
 
+const PUZ_BLOCK = ".";
+const MY_BLOCK = "X";
+const MY_LETTER = ".";
+
 const scrapePuzzleUrl = async () => {
   try {
     const response = await axios.get(`${PRIVATE_EYE_WEBSITE_URL}/crossword`);
@@ -23,21 +27,104 @@ const parsePuzzle = async (url) => {
   return readpuz(response.data);
 };
 
+const convertCharToMyFormat = (char) => char === PUZ_BLOCK ? MY_BLOCK : MY_LETTER;
+
+const convertLineToMyFormat = (line) => {
+  const chars = Array.from(line);
+  return chars.map(convertCharToMyFormat).join("");
+};
+
 const parseGrid = (state, size) => {
   const grid = [];
   let curr = 0;
-  for (;;) {
+  for (; ;) {
     const line = state.slice(curr, curr + size);
-    grid.push(line);
+    grid.push(convertLineToMyFormat(line));
     curr += size;
     if (curr >= size * size) break;
   }
   return grid;
 };
 
-export async function handler(event) {
+const computeSquares = grid => {
+
+  const SIZE = grid.length;
+
+  const isBlock = (rowIndex, colIndex) =>
+    rowIndex < 0 || rowIndex >= SIZE ||
+    colIndex < 0 || colIndex >= SIZE ||
+    grid[rowIndex][colIndex] === MY_BLOCK;
+
+  let currentClueNumber = 1;
+
+  return grid.flatMap((gridLine, rowIndex) => {
+    const chars = Array.from(gridLine);
+    return chars.map((char, colIndex) => {
+      const isLetter = char === MY_LETTER;
+      const leftIsBlock = isBlock(rowIndex, colIndex - 1);
+      const rightIsBlock = isBlock(rowIndex, colIndex + 1);
+      const aboveIsBlock = isBlock(rowIndex - 1, colIndex);
+      const belowIsBlock = isBlock(rowIndex + 1, colIndex);
+      const isAcrossClue = isLetter && leftIsBlock && !rightIsBlock;
+      const isDownClue = isLetter && aboveIsBlock && !belowIsBlock;
+      const maybeClueNumber = isAcrossClue || isDownClue
+        ? { clueNumber: currentClueNumber++ }
+        : undefined;
+      return {
+        rowIndex,
+        colIndex,
+        isAcrossClue,
+        isDownClue,
+        ...maybeClueNumber,
+      };
+    });
+  });
+};
+
+const partitionClues = (grid, clues) => {
+  const squares = computeSquares(grid);
+  const numberedSquares = squares.filter(({ isAcrossClue, isDownClue }) => isAcrossClue || isDownClue);
+
+  const seed = {
+    clueIndex: 0,
+    acrossClues: [],
+    downClues: []
+  };
+
+  const finalAcc = numberedSquares.reduce((acc, square) => {
+    const { isAcrossClue, isDownClue, rowIndex, colIndex, clueNumber } = square;
+    if (!isAcrossClue && !isDownClue) return acc;
+    const acrossClues = isAcrossClue
+      ? [{
+        rowIndex,
+        colIndex,
+        clueNumber,
+        clue: clues[acc.clueIndex]
+      }]
+      : [];
+    const downClues = isDownClue
+      ? [{
+        rowIndex,
+        colIndex,
+        clueNumber,
+        clue: clues[acc.clueIndex + acrossClues.length]
+      }]
+      : [];
+    return {
+      clueIndex: acc.clueIndex + acrossClues.length + downClues.length,
+      acrossClues: [...acc.acrossClues, ...acrossClues],
+      downClues: [...acc.downClues, ...downClues],
+    };
+  }, seed);
+
+  const { acrossClues, downClues } = finalAcc;
+  return { acrossClues, downClues };
+};
+
+export async function handler(_event) {
   const puzzleUrl = await scrapePuzzleUrl();
   const puzzle = await parsePuzzle(puzzleUrl);
   const grid = parseGrid(puzzle.state, puzzle.width);
-  return { puzzleUrl, puzzle, grid };
+  const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
+  return { puzzleUrl, puzzle, grid, acrossClues, downClues };
 }
