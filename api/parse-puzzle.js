@@ -1,25 +1,10 @@
 import axios from "axios";
 import { readpuz } from "@confuzzle/readpuz"
-
-const PRIVATE_EYE_WEBSITE_URL = "https://www.private-eye.co.uk";
+import { scrapePuzzleUrl } from "./scrape-puzzle-url"
 
 const PUZ_BLOCK = ".";
 const MY_BLOCK = "X";
 const MY_LETTER = ".";
-
-const scrapePuzzleUrl = async () => {
-  try {
-    const response = await axios.get(`${PRIVATE_EYE_WEBSITE_URL}/crossword`);
-    const data = response.data;
-    const regex = /(pictures\/crossword\/download\/[\d]+\.puz)/;
-    const match = regex.exec(data);
-    return match
-      ? `${PRIVATE_EYE_WEBSITE_URL}/${match[1]}`
-      : null;
-  } catch (error) {
-    return error.message;
-  }
-};
 
 const parsePuzzle = async (url) => {
   const config = { responseType: "arraybuffer" };

@@ -17,3 +17,9 @@ functions:
       - httpApi:
           method: get
           path: /parse-puzzle
+  scrape-puzzle-url:
+    handler: api/scrape-puzzle-url.handler
+    events:
+      - httpApi:
+          method: get
+          path: /scrape-puzzle-url
