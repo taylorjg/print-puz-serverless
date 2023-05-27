@@ -10,8 +10,8 @@ This used to be deployed to [Heroku](https://www.heroku.com/). When they discont
 I moved it to [Render](https://render.com/). This is fine but it seems to take longer to spin-up than it used to.
 
 I'd really like to deploy it to `gh-pages`. But I need a backend - at least to scrape the link
-from the Private Eye website. So, I the purpose of this repo is to re-package my backend code
-as AWS Lambda functions and deploy them using the [Serverless Framework](https://www.serverless.com/framework).
+from the Private Eye website. So, the purpose of this repo is to re-package my backend code
+as AWS Lambda functions and deploy them using [Serverless Framework](https://www.serverless.com/framework).
 
 # Serverless Functions
 
