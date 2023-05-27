@@ -1,5 +1,6 @@
 import axios from "axios";
-import { readpuz } from "@confuzzle/readpuz"
+import { readpuz } from "@confuzzle/readpuz";
+import { makeResponse } from "./utils";
 
 const PUZ_BLOCK = ".";
 const MY_BLOCK = "X";
@@ -105,23 +106,21 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event, _context, _callback) {
-  const puzzleUrl = event.queryStringParameters.puzzleUrl;
+  const puzzleUrl = event.queryStringParameters?.puzzleUrl;
+
+  if (!puzzleUrl) {
+    return makeResponse(400, { error: "Missing puzzleUrl query string parameter" });
+  }
+
   const puzzle = await parsePuzzle(puzzleUrl);
   const grid = parseGrid(puzzle.state, puzzle.width);
   const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
-  const response = {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      puzzleUrl,
-      puzzle,
-      grid,
-      acrossClues,
-      downClues,
-    })
-  };
-  return response;
-}
+
+  return makeResponse(200, {
+    puzzleUrl,
+    puzzle,
+    grid,
+    acrossClues,
+    downClues,
+  });
+};

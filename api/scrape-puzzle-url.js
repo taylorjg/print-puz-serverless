@@ -1,4 +1,5 @@
 import axios from "axios";
+import { makeResponse } from "./utils";
 
 const PRIVATE_EYE_WEBSITE_URL = "https://www.private-eye.co.uk";
 
@@ -18,15 +19,5 @@ export const scrapePuzzleUrl = async () => {
 
 export async function handler(_event, _context, _callback) {
   const puzzleUrl = await scrapePuzzleUrl();
-  const response = {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      puzzleUrl,
-    })
-  };
-  return response;
+  return makeResponse(200, { puzzleUrl });
 }
