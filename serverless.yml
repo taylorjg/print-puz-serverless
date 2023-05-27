@@ -1,7 +1,7 @@
-app: print-puz-test
-service: print-puz-test
 frameworkVersion: '3'
 org: taylorjg
+app: print-puz
+service: print-puz
 
 provider:
   name: aws
@@ -11,9 +11,9 @@ plugins:
   - serverless-webpack
 
 functions:
-  api:
-    handler: index.handler
+  parse-puzzle:
+    handler: api/parse-puzzle.handler
     events:
       - httpApi:
-          path: /
           method: get
+          path: /parse-puzzle

@@ -120,7 +120,7 @@ const partitionClues = (grid, clues) => {
   return { acrossClues, downClues };
 };
 
-export async function handler(event, context, callback) {
+export async function handler(_event, _context, _callback) {
   const puzzleUrl = await scrapePuzzleUrl();
   const puzzle = await parsePuzzle(puzzleUrl);
   const grid = parseGrid(puzzle.state, puzzle.width);
@@ -139,5 +139,5 @@ export async function handler(event, context, callback) {
       downClues,
     })
   };
-  callback(null, response);
+  return response;
 }
