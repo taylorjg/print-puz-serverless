@@ -1,6 +1,5 @@
 import axios from "axios";
 import { readpuz } from "@confuzzle/readpuz"
-import { scrapePuzzleUrl } from "./scrape-puzzle-url"
 
 const PUZ_BLOCK = ".";
 const MY_BLOCK = "X";
@@ -105,8 +104,8 @@ const partitionClues = (grid, clues) => {
   return { acrossClues, downClues };
 };
 
-export async function handler(_event, _context, _callback) {
-  const puzzleUrl = await scrapePuzzleUrl();
+export async function handler(event, _context, _callback) {
+  const puzzleUrl = event.queryStringParameters.puzzleUrl;
   const puzzle = await parsePuzzle(puzzleUrl);
   const grid = parseGrid(puzzle.state, puzzle.width);
   const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
