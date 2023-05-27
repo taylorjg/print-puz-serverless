@@ -1,16 +1,15 @@
 import axios from "axios";
 import { makeResponse } from "./utils";
-
-const PRIVATE_EYE_WEBSITE_URL = "https://www.private-eye.co.uk";
+import * as C from "./constants";
 
 export const scrapePuzzleUrl = async () => {
   try {
-    const response = await axios.get(`${PRIVATE_EYE_WEBSITE_URL}/crossword`);
+    const response = await axios.get(`${C.PRIVATE_EYE_WEBSITE_URL}/crossword`);
     const data = response.data;
     const regex = /(pictures\/crossword\/download\/[\d]+\.puz)/;
     const match = regex.exec(data);
     return match
-      ? `${PRIVATE_EYE_WEBSITE_URL}/${match[1]}`
+      ? `${C.PRIVATE_EYE_WEBSITE_URL}/${match[1]}`
       : null;
   } catch (error) {
     return error.message;

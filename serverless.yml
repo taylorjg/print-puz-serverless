@@ -11,15 +11,21 @@ plugins:
   - serverless-webpack
 
 functions:
-  parse-puzzle:
-    handler: api/parse-puzzle.handler
-    events:
-      - httpApi:
-          method: get
-          path: /parse-puzzle
   scrape-puzzle-url:
     handler: api/scrape-puzzle-url.handler
     events:
       - httpApi:
           method: get
           path: /scrape-puzzle-url
+  list-puzzles:
+    handler: api/list-puzzles.handler
+    events:
+      - httpApi:
+          method: get
+          path: /list-puzzles
+  parse-puzzle:
+    handler: api/parse-puzzle.handler
+    events:
+      - httpApi:
+          method: get
+          path: /parse-puzzle

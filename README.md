@@ -15,11 +15,13 @@ as AWS Lambda functions and deploy them using [Serverless Framework](https://www
 
 # Serverless Functions
 
-The backend comprises two serverless functions:
+The backend comprises the following serverless functions:
 
 * scrape-puzzle-url
   * Scrape a link to the current cryptic crossword puzzle from [Private Eye's crossword page](https://www.private-eye.co.uk/crossword)
   * e.g. https://www.private-eye.co.uk/pictures/crossword/download/753.puz
+* list-puzzles
+  * Parse the directory listing of https://www.private-eye.co.uk/pictures/crossword/download/
 * parse-puzzle
   * Given the URL of a .puz file, read and parse the binary puzzle description and return it in an easy-to-consume JSON format
 
@@ -37,9 +39,27 @@ serverless invoke --function scrape-puzzle-url
 curl https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/scrape-puzzle-url -s | jq
 ```
 
-### Browser GET Request 
+### Browser GET Request
 
 https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/scrape-puzzle-url
+
+## list-puzzles
+
+### Serverless CLI
+
+```
+serverless invoke --function list-puzzles
+```
+
+### Curl
+
+```
+curl https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/list-puzzles -s | jq
+```
+
+### Browser GET Request
+
+https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/list-puzzles
 
 ## parse-puzzle
 
