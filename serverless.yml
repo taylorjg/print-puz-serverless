@@ -12,19 +12,19 @@ plugins:
 
 functions:
   scrape-puzzle-url:
-    handler: api/scrape-puzzle-url.handler
+    handler: src/scrape-puzzle-url.handler
     events:
       - httpApi:
           method: get
           path: /scrape-puzzle-url
   list-puzzles:
-    handler: api/list-puzzles.handler
+    handler: src/list-puzzles.handler
     events:
       - httpApi:
           method: get
           path: /list-puzzles
   parse-puzzle:
-    handler: api/parse-puzzle.handler
+    handler: src/parse-puzzle.handler
     events:
       - httpApi:
           method: get
