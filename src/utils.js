@@ -22,8 +22,12 @@ export const getErrorMessage = (e) => {
 
 export const wrapHandlerImplementation = async (handlerImplementation) => {
   try {
-    const result = await handlerImplementation();
-    return makeResponse(200, result);
+    let specialResponse = undefined;
+    const makeSpecialResponse = (statusCode, error) => {
+      specialResponse = makeResponse(statusCode, { error });
+    };
+    const result = await handlerImplementation(makeSpecialResponse);
+    return specialResponse ?? makeResponse(200, result);
   } catch (error) {
     return makeResponse(500, { error: getErrorMessage(error) });
   }

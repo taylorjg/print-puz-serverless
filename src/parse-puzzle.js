@@ -106,25 +106,23 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event, _context, _callback) {
-  try {
+  return U.wrapHandlerImplementation(async (makeSpecialResponse) => {
     const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 
     if (!puzzleUrl) {
-      return U.makeResponse(400, { error: "Missing puzzleUrl query string parameter" });
+      return makeSpecialResponse(400, "Missing puzzleUrl query string parameter");
     }
 
     const puzzle = await parsePuzzle(puzzleUrl);
     const grid = parseGrid(puzzle.state, puzzle.width);
     const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
 
-    return U.makeResponse(200, {
+    return {
       puzzleUrl,
       puzzle,
       grid,
       acrossClues,
       downClues,
-    });
-  } catch (error) {
-    return U.makeResponse(500, { error: U.getErrorMessage(error) });
-  }
+    };
+  });
 };
