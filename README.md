@@ -28,7 +28,7 @@ The backend comprises the following serverless functions:
 * list-puzzles
   * Parse the directory listing of https://www.private-eye.co.uk/pictures/crossword/download/
 * parse-puzzle
-  * Given the URL of a .puz file, read and parse the binary puzzle description and return it in an easy-to-consume JSON format
+  * Given the URL of a .puz file, read and parse the binary puzzle description and return the parsed puzzle, plus some extended information, in JSON format
 
 ## scrape-puzzle-url
 

@@ -106,7 +106,7 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event, _context, _callback) {
-  return U.wrapHandlerImplementation(async (makeSpecialResponse) => {
+  return U.wrapHandlerImplementation("parse-puzzle", async (makeSpecialResponse) => {
     const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 
     if (!puzzleUrl) {

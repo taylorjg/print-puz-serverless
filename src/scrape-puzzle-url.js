@@ -13,7 +13,7 @@ export const scrapePuzzleUrl = async () => {
 };
 
 export async function handler(/* event, context, callback */) {
-  return U.wrapHandlerImplementation(async () => {
+  return U.wrapHandlerImplementation("scrape-puzzle-url", async () => {
     const puzzleUrl = await scrapePuzzleUrl();
     return { puzzleUrl };
   });
