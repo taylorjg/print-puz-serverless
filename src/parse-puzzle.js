@@ -1,6 +1,6 @@
 import axios from "axios";
 import { readpuz } from "@confuzzle/readpuz";
-import { makeResponse } from "./utils";
+import * as U from "./utils";
 
 const PUZ_BLOCK = ".";
 const MY_BLOCK = "X";
@@ -106,21 +106,25 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event, _context, _callback) {
-  const puzzleUrl = event.queryStringParameters?.puzzleUrl;
+  try {
+    const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 
-  if (!puzzleUrl) {
-    return makeResponse(400, { error: "Missing puzzleUrl query string parameter" });
+    if (!puzzleUrl) {
+      return U.makeResponse(400, { error: "Missing puzzleUrl query string parameter" });
+    }
+
+    const puzzle = await parsePuzzle(puzzleUrl);
+    const grid = parseGrid(puzzle.state, puzzle.width);
+    const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
+
+    return U.makeResponse(200, {
+      puzzleUrl,
+      puzzle,
+      grid,
+      acrossClues,
+      downClues,
+    });
+  } catch (error) {
+    return U.makeResponse(500, { error: U.getErrorMessage(error) });
   }
-
-  const puzzle = await parsePuzzle(puzzleUrl);
-  const grid = parseGrid(puzzle.state, puzzle.width);
-  const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
-
-  return makeResponse(200, {
-    puzzleUrl,
-    puzzle,
-    grid,
-    acrossClues,
-    downClues,
-  });
 };
