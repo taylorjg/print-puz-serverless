@@ -14,10 +14,8 @@ export const parseDownloadPage = async () => {
       const filename = row.match(/href="([^"]*)"/)?.[1]
       const timestamp = row.match(/[>](\d{4}-\d{2}-\d{2})/)?.[1]
       if (filename && timestamp) {
-        puzzles.push({
-          filename: `${C.PRIVATE_EYE_WEBSITE_URL}/pictures/crossword/download/${filename}`,
-          timestamp
-        })
+        const url = `${C.PRIVATE_EYE_WEBSITE_URL}/pictures/crossword/download/${filename}`;
+        puzzles.push({ url, timestamp })
       }
     }
   }
