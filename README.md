@@ -1,6 +1,6 @@
 # Description
 
-A while ago, I wrote a little web app to:
+A while ago, I wrote [a little web app](https://github.com/taylorjg/print-puz) to:
 
 * Scrape a link to the current Private Eye cryptic crossword puzzle
 * Download and parse the binary puzzle description
@@ -12,6 +12,11 @@ I moved it to [Render](https://render.com/). This is fine but it seems to take l
 I'd really like to deploy it to `gh-pages`. But I need a backend - at least to scrape the link
 from the Private Eye website. So, the purpose of this repo is to re-package my backend code
 as AWS Lambda functions and deploy them using [Serverless Framework](https://www.serverless.com/framework).
+
+I have started work on a new frontend web app to consume these serverless functions:
+
+* Repo: https://github.com/taylorjg/print-puz-react-vite
+* Deployed website: https://taylorjg.github.io/print-puz-react-vite/
 
 # Serverless Functions
 
