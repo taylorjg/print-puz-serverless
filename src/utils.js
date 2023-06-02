@@ -16,11 +16,9 @@ export const makeErrorResponse = (statusCode, error, functionName) => {
   return makeResponse(statusCode, { error: enhancedError });
 };
 
-export const getErrorMessage = (e) => {
+const extractErrorMessage = (e) => {
   if (axios.isAxiosError(e) && e.response) {
-    const { status, statusText } = e.response;
-    const message = e.response.data?.message ?? e.message
-    return `status: ${status}; statusText: ${statusText}; message: ${message}`
+    // TODO: we could/should log e.response.data;
   }
   return e.message;
 };
@@ -35,6 +33,6 @@ export const wrapHandlerImplementation = async (functionName, handlerImplementat
     const result = await handlerImplementation(makeSpecialResponse);
     return specialResponse ?? makeResponse(200, result);
   } catch (error) {
-    return makeErrorResponse(500, getErrorMessage(error), functionName);
+    return makeErrorResponse(500, extractErrorMessage(error), functionName);
   }
 };
