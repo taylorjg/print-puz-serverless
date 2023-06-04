@@ -17,8 +17,13 @@ export const makeErrorResponse = (statusCode, error, functionName) => {
 };
 
 const extractErrorMessage = (e) => {
-  if (axios.isAxiosError(e) && e.response) {
-    // TODO: we could/should log e.response.data;
+  console.error("[extractErrorMessage]", e.toString());
+  if (axios.isAxiosError(e) && e.response?.data) {
+    if (e.response.data.toString) {
+      console.error("[extractErrorMessage]", e.response.data.toString());
+    } else {
+      console.error("[extractErrorMessage]", e.response.data);
+    }
   }
   return e.message;
 };
@@ -27,6 +32,7 @@ export const wrapHandlerImplementation = async (functionName, handlerImplementat
   try {
     let specialResponse = undefined;
     const makeSpecialResponse = (statusCode, error) => {
+      console.error("[makeSpecialResponse]", error);
       specialResponse = makeErrorResponse(statusCode, error, functionName);
     };
 
