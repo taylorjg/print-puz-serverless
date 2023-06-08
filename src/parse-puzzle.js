@@ -31,6 +31,20 @@ const parseGrid = (state, size) => {
   return grid;
 };
 
+const EN_DASH = 0x96;
+const HYPHEN_MINUS = 0x2d;
+
+// I'm not sure what encoding the .puz file is in (Windows-1250 ?)
+// but there are several occurrences of 0x96 which I think is meant
+// to be EN DASH. However, they seem to come out funny so I am
+// converting them to ASCII 0x2d.
+const convertEnDashToHyphenMinus = ch =>
+  ch.codePointAt(0) === EN_DASH
+    ? String.fromCodePoint(HYPHEN_MINUS)
+    : ch;
+
+const fixDashes = (clue) => Array.from(clue).map(convertEnDashToHyphenMinus).join("");
+
 const computeNumberedSquares = grid => {
 
   const SIZE = grid.length;
@@ -83,7 +97,7 @@ const partitionClues = (grid, clues) => {
         rowIndex,
         colIndex,
         clueNumber,
-        clue: clues[acc.clueIndex]
+        clue: fixDashes(clues[acc.clueIndex])
       }]
       : [];
     const downClues = isDownClue
@@ -91,7 +105,7 @@ const partitionClues = (grid, clues) => {
         rowIndex,
         colIndex,
         clueNumber,
-        clue: clues[acc.clueIndex + acrossClues.length]
+        clue: fixDashes(clues[acc.clueIndex + acrossClues.length])
       }]
       : [];
     return {
