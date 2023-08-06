@@ -6,6 +6,7 @@ service: print-puz
 provider:
   name: aws
   runtime: nodejs18.x
+  timeout: 10
 
 plugins:
   - serverless-webpack
