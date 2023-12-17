@@ -13,8 +13,11 @@ export const scrapePuzzleUrl = async () => {
 };
 
 export async function handler(/* event, context, callback */) {
-  return U.wrapHandlerImplementation("scrape-puzzle-url", async () => {
+  return U.wrapHandlerImplementation("scrape-puzzle-url", async (makeSpecialResponse) => {
     const puzzleUrl = await scrapePuzzleUrl();
+    if (puzzleUrl === null) {
+      return makeSpecialResponse(404, "Failed to find .puz url on current crossword page");
+    }
     return { puzzleUrl };
   });
 };

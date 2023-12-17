@@ -127,16 +127,24 @@ export async function handler(event, _context, _callback) {
       return makeSpecialResponse(400, "Missing puzzleUrl query string parameter");
     }
 
-    const puzzle = await parsePuzzle(puzzleUrl);
-    const grid = parseGrid(puzzle.state, puzzle.width);
-    const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
+    try {
+      const puzzle = await parsePuzzle(puzzleUrl);
+      const grid = parseGrid(puzzle.state, puzzle.width);
+      const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
 
-    return {
-      puzzleUrl,
-      puzzle,
-      grid,
-      acrossClues,
-      downClues,
-    };
+      return {
+        puzzleUrl,
+        puzzle,
+        grid,
+        acrossClues,
+        downClues,
+      };
+    } catch (error) {
+      if (error.response?.status === 404) {
+        return makeSpecialResponse(404, "Failed to find puzzle with given puzzleUrl");
+      } else {
+        throw error;
+      }
+    }
   });
 };
