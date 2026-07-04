@@ -1,15 +1,14 @@
-frameworkVersion: '3'
-org: taylorjg
-app: print-puz
 service: print-puz
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
 
 provider:
   name: aws
-  runtime: nodejs18.x
-  timeout: 10
-
-plugins:
-  - serverless-webpack
+  profile: taylorjg
+  runtime: nodejs24.x
 
 functions:
   scrape-puzzle-url:
