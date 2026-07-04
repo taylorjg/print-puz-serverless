@@ -1,7 +1,7 @@
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import globals from "globals";
-import vitest from "eslint-plugin-vitest";
+import vitest from "@vitest/eslint-plugin";
 
 export default [
   {
