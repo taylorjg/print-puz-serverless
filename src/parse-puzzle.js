@@ -12,7 +12,8 @@ const parsePuzzle = async (url) => {
   return readpuz(response.data);
 };
 
-const convertCharToMyFormat = (char) => char === PUZ_BLOCK ? MY_BLOCK : MY_LETTER;
+const convertCharToMyFormat = (char) =>
+  char === PUZ_BLOCK ? MY_BLOCK : MY_LETTER;
 
 const convertLineToMyFormat = (line) => {
   const chars = Array.from(line);
@@ -22,7 +23,7 @@ const convertLineToMyFormat = (line) => {
 const parseGrid = (state, size) => {
   const grid = [];
   let curr = 0;
-  for (; ;) {
+  for (;;) {
     const line = state.slice(curr, curr + size);
     grid.push(convertLineToMyFormat(line));
     curr += size;
@@ -38,20 +39,20 @@ const HYPHEN_MINUS = 0x2d;
 // but there are several occurrences of 0x96 which I think is meant
 // to be EN DASH. However, they seem to come out funny so I am
 // converting them to ASCII 0x2d.
-const convertEnDashToHyphenMinus = ch =>
-  ch.codePointAt(0) === EN_DASH
-    ? String.fromCodePoint(HYPHEN_MINUS)
-    : ch;
+const convertEnDashToHyphenMinus = (ch) =>
+  ch.codePointAt(0) === EN_DASH ? String.fromCodePoint(HYPHEN_MINUS) : ch;
 
-const fixDashes = (clue) => Array.from(clue).map(convertEnDashToHyphenMinus).join("");
+const fixDashes = (clue) =>
+  Array.from(clue).map(convertEnDashToHyphenMinus).join("");
 
-const computeNumberedSquares = grid => {
-
+const computeNumberedSquares = (grid) => {
   const SIZE = grid.length;
 
   const isBlock = (rowIndex, colIndex) =>
-    rowIndex < 0 || rowIndex >= SIZE ||
-    colIndex < 0 || colIndex >= SIZE ||
+    rowIndex < 0 ||
+    rowIndex >= SIZE ||
+    colIndex < 0 ||
+    colIndex >= SIZE ||
     grid[rowIndex][colIndex] === MY_BLOCK;
 
   let currentClueNumber = 1;
@@ -67,13 +68,15 @@ const computeNumberedSquares = grid => {
       const isAcrossClue = isLetter && leftIsBlock && !rightIsBlock;
       const isDownClue = isLetter && aboveIsBlock && !belowIsBlock;
       if (isAcrossClue || isDownClue) {
-        return [{
-          rowIndex,
-          colIndex,
-          isAcrossClue,
-          isDownClue,
-          clueNumber: currentClueNumber++,
-        }];
+        return [
+          {
+            rowIndex,
+            colIndex,
+            isAcrossClue,
+            isDownClue,
+            clueNumber: currentClueNumber++,
+          },
+        ];
       } else {
         return [];
       }
@@ -87,26 +90,30 @@ const partitionClues = (grid, clues) => {
   const seed = {
     clueIndex: 0,
     acrossClues: [],
-    downClues: []
+    downClues: [],
   };
 
   const finalAcc = numberedSquares.reduce((acc, square) => {
     const { rowIndex, colIndex, isAcrossClue, isDownClue, clueNumber } = square;
     const acrossClues = isAcrossClue
-      ? [{
-        rowIndex,
-        colIndex,
-        clueNumber,
-        clue: fixDashes(clues[acc.clueIndex])
-      }]
+      ? [
+          {
+            rowIndex,
+            colIndex,
+            clueNumber,
+            clue: fixDashes(clues[acc.clueIndex]),
+          },
+        ]
       : [];
     const downClues = isDownClue
-      ? [{
-        rowIndex,
-        colIndex,
-        clueNumber,
-        clue: fixDashes(clues[acc.clueIndex + acrossClues.length])
-      }]
+      ? [
+          {
+            rowIndex,
+            colIndex,
+            clueNumber,
+            clue: fixDashes(clues[acc.clueIndex + acrossClues.length]),
+          },
+        ]
       : [];
     return {
       clueIndex: acc.clueIndex + acrossClues.length + downClues.length,
@@ -120,31 +127,40 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event, _context, _callback) {
-  return U.wrapHandlerImplementation("parse-puzzle", async (makeSpecialResponse) => {
-    const puzzleUrl = event.queryStringParameters?.puzzleUrl;
+  return U.wrapHandlerImplementation(
+    "parse-puzzle",
+    async (makeSpecialResponse) => {
+      const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 
-    if (!puzzleUrl) {
-      return makeSpecialResponse(400, "Missing puzzleUrl query string parameter");
-    }
+      if (!puzzleUrl) {
+        return makeSpecialResponse(
+          400,
+          "Missing puzzleUrl query string parameter"
+        );
+      }
 
-    try {
-      const puzzle = await parsePuzzle(puzzleUrl);
-      const grid = parseGrid(puzzle.state, puzzle.width);
-      const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
+      try {
+        const puzzle = await parsePuzzle(puzzleUrl);
+        const grid = parseGrid(puzzle.state, puzzle.width);
+        const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
 
-      return {
-        puzzleUrl,
-        puzzle,
-        grid,
-        acrossClues,
-        downClues,
-      };
-    } catch (error) {
-      if (error.response?.status === 404) {
-        return makeSpecialResponse(404, "Failed to find puzzle with given puzzleUrl");
-      } else {
-        throw error;
+        return {
+          puzzleUrl,
+          puzzle,
+          grid,
+          acrossClues,
+          downClues,
+        };
+      } catch (error) {
+        if (error.response?.status === 404) {
+          return makeSpecialResponse(
+            404,
+            "Failed to find puzzle with given puzzleUrl"
+          );
+        } else {
+          throw error;
+        }
       }
     }
-  });
-};
+  );
+}

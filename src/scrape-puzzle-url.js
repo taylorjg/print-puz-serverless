@@ -7,17 +7,21 @@ export const scrapePuzzleUrl = async () => {
   const data = response.data;
   const regex = /(pictures\/crossword\/download\/[\d]+\.puz)/;
   const match = regex.exec(data);
-  return match
-    ? `${C.PRIVATE_EYE_WEBSITE_URL}/${match[1]}`
-    : null;
+  return match ? `${C.PRIVATE_EYE_WEBSITE_URL}/${match[1]}` : null;
 };
 
 export async function handler(/* event, context, callback */) {
-  return U.wrapHandlerImplementation("scrape-puzzle-url", async (makeSpecialResponse) => {
-    const puzzleUrl = await scrapePuzzleUrl();
-    if (puzzleUrl === null) {
-      return makeSpecialResponse(404, "Failed to find .puz url on current crossword page");
+  return U.wrapHandlerImplementation(
+    "scrape-puzzle-url",
+    async (makeSpecialResponse) => {
+      const puzzleUrl = await scrapePuzzleUrl();
+      if (puzzleUrl === null) {
+        return makeSpecialResponse(
+          404,
+          "Failed to find .puz url on current crossword page"
+        );
+      }
+      return { puzzleUrl };
     }
-    return { puzzleUrl };
-  });
-};
+  );
+}

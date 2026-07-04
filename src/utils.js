@@ -7,7 +7,7 @@ export const makeResponse = (statusCode, body) => {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   };
 };
 
@@ -28,7 +28,10 @@ const extractErrorMessage = (e) => {
   return e.message;
 };
 
-export const wrapHandlerImplementation = async (functionName, handlerImplementation) => {
+export const wrapHandlerImplementation = async (
+  functionName,
+  handlerImplementation
+) => {
   try {
     let specialResponse = undefined;
     const makeSpecialResponse = (statusCode, error) => {
