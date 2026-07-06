@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+# --------------------------------
 # Run via: npm run test:invoke-all
+# --------------------------------
+
 set -euo pipefail
 
-cd "$(dirname "$0")/.."
+export SLS_AWS_SDK=3
 
 SAMPLE_PUZZLE_URL="https://www.private-eye.co.uk/pictures/crossword/download/833.puz"
 

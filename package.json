@@ -4,8 +4,8 @@
   "description": "Serverless backend for print-puz-react-vite",
   "main": "index.js",
   "scripts": {
-    "deploy": "serverless deploy",
-    "info": "serverless info",
+    "deploy": "SLS_AWS_SDK=3 serverless deploy",
+    "info": "SLS_AWS_SDK=3 serverless info",
     "test": "vitest run",
     "test:invoke-all": "bash test/invoke-all.sh",
     "lint": "eslint .",
