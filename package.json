@@ -7,6 +7,7 @@
     "deploy": "serverless deploy",
     "info": "serverless info",
     "test": "vitest run",
+    "test:invoke-all": "bash test/invoke-all.sh",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
