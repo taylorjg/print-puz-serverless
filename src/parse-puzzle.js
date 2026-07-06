@@ -126,7 +126,7 @@ const partitionClues = (grid, clues) => {
   return { acrossClues, downClues };
 };
 
-export async function handler(event, _context, _callback) {
+export async function handler(event) {
   return U.wrapHandlerImplementation(
     "parse-puzzle",
     async (makeSpecialResponse) => {

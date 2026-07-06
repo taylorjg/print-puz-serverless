@@ -10,7 +10,7 @@ export const scrapePuzzleUrl = async () => {
   return match ? `${C.PRIVATE_EYE_WEBSITE_URL}/${match[1]}` : null;
 };
 
-export async function handler(/* event, context, callback */) {
+export async function handler() {
   return U.wrapHandlerImplementation(
     "scrape-puzzle-url",
     async (makeSpecialResponse) => {

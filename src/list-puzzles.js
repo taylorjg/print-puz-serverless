@@ -24,7 +24,7 @@ export const parseDownloadPage = async () => {
   return puzzles;
 };
 
-export async function handler(/* event, context, callback */) {
+export async function handler() {
   return U.wrapHandlerImplementation("list-puzzles", async () => {
     const puzzles = await parseDownloadPage();
     return { puzzles };
