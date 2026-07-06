@@ -9,6 +9,8 @@ provider:
   name: aws
   profile: taylorjg
   runtime: nodejs24.x
+  httpApi:
+    cors: true
 
 functions:
   scrape-puzzle-url:

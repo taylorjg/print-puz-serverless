@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as C from "./constants";
-import * as U from "./utils";
+import * as U from "./serverless-utils";
 
 export const parseDownloadPage = async () => {
   const response = await axios.get(
@@ -25,7 +25,7 @@ export const parseDownloadPage = async () => {
 };
 
 export async function handler() {
-  return U.wrapHandlerImplementation("list-puzzles", async () => {
+  return U.wrapHandlerImplementation("/list-puzzles", async () => {
     const puzzles = await parseDownloadPage();
     return { puzzles };
   });

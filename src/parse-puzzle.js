@@ -1,6 +1,6 @@
 import axios from "axios";
 import { readpuz } from "@confuzzle/readpuz";
-import * as U from "./utils";
+import * as U from "./serverless-utils";
 
 const PUZ_BLOCK = ".";
 const MY_BLOCK = "X";
@@ -128,7 +128,7 @@ const partitionClues = (grid, clues) => {
 
 export async function handler(event) {
   return U.wrapHandlerImplementation(
-    "parse-puzzle",
+    "/parse-puzzle",
     async (makeSpecialResponse) => {
       const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 

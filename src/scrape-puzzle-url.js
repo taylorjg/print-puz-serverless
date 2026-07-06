@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as C from "./constants";
-import * as U from "./utils";
+import * as U from "./serverless-utils";
 
 export const scrapePuzzleUrl = async () => {
   const response = await axios.get(`${C.PRIVATE_EYE_WEBSITE_URL}/crossword`);
@@ -12,7 +12,7 @@ export const scrapePuzzleUrl = async () => {
 
 export async function handler() {
   return U.wrapHandlerImplementation(
-    "scrape-puzzle-url",
+    "/scrape-puzzle-url",
     async (makeSpecialResponse) => {
       const puzzleUrl = await scrapePuzzleUrl();
       if (puzzleUrl === null) {
