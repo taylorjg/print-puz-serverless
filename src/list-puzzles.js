@@ -27,6 +27,7 @@ export const parseDownloadPage = async () => {
 export async function handler() {
   return U.wrapHandlerImplementation("/list-puzzles", async () => {
     const puzzles = await parseDownloadPage();
+    console.info("puzzleCount:", puzzles.length);
     return { puzzles };
   });
 }

@@ -139,18 +139,29 @@ export async function handler(event) {
         );
       }
 
+      console.info("puzzleUrl:", puzzleUrl);
+
       try {
         const puzzle = await parsePuzzle(puzzleUrl);
         const grid = parseGrid(puzzle.state, puzzle.width);
         const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
 
-        return {
+        const result = {
           puzzleUrl,
           puzzle,
           grid,
           acrossClues,
           downClues,
         };
+        console.info("result:", {
+          puzzleUrl: result.puzzleUrl,
+          title: result.puzzle.title,
+          width: result.puzzle.width,
+          height: result.puzzle.height,
+          acrossClueCount: result.acrossClues.length,
+          downClueCount: result.downClues.length,
+        });
+        return result;
       } catch (error) {
         if (error.response?.status === 404) {
           return makeSpecialResponse(

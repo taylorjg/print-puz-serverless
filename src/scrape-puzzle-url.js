@@ -21,7 +21,9 @@ export async function handler() {
           "Failed to find .puz url on current crossword page"
         );
       }
-      return { puzzleUrl };
+      const result = { puzzleUrl };
+      console.info("result:", result);
+      return result;
     }
   );
 }

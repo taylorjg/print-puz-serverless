@@ -48,7 +48,7 @@ export const wrapHandlerImplementation = async (
     const result = await handlerImplementation(makeSpecialResponse);
     return specialResponse ?? makeResponse(200, result);
   } catch (error) {
-    console.log("Caught error:", error.message);
+    console.error("Caught error:", error.message);
     if (axios.isAxiosError(error)) {
       const statusCode = error.response?.status ?? 500;
       const errorMessage = extractErrorMessage(error);
