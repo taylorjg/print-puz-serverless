@@ -1,6 +1,6 @@
 {
   "name": "print-puz-serverless",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Serverless backend for print-puz-react-vite",
   "main": "index.js",
   "scripts": {
