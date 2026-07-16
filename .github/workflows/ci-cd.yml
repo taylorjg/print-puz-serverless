@@ -1,14 +1,11 @@
-name: CI
+name: ci-cd
 
 on:
   push:
-    branches:
-      - main
-      - master
   pull_request:
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
 
     steps:
