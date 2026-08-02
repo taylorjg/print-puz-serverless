@@ -1,24 +1,30 @@
 import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import globals from "globals";
+import eslintConfigPrettier from "eslint-config-prettier";
+import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import vitest from "@vitest/eslint-plugin";
+import globals from "globals";
 
 export default [
   {
-    ignores: ["node_modules/", ".serverless/"],
+    ignores: ["node_modules/**", ".serverless/**"],
   },
   js.configs.recommended,
-  prettier,
+  eslintConfigPrettier,
+  eslintPluginPrettier,
   {
-    files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.node,
+        ...vitest.environments.env.globals,
       },
     },
+    plugins: {
+      vitest,
+    },
     rules: {
+      ...vitest.configs.recommended.rules,
       "no-unused-vars": [
         "error",
         {
@@ -26,20 +32,6 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-    },
-  },
-  {
-    files: ["test/**/*.js"],
-    plugins: {
-      vitest,
-    },
-    rules: {
-      ...vitest.configs.recommended.rules,
-    },
-    languageOptions: {
-      globals: {
-        ...vitest.environments.env.globals,
-      },
     },
   },
 ];

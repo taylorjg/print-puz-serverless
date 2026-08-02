@@ -8,10 +8,7 @@
     "info": "SLS_AWS_SDK=3 serverless info",
     "test": "vitest run",
     "test:invoke-all": "bash test/invoke-all.sh",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",
@@ -24,6 +21,7 @@
     "@vitest/eslint-plugin": "^1.6.24",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
     "globals": "^17.7.0",
     "prettier": "^3.9.6",
     "serverless": "^4.40.0",
