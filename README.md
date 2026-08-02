@@ -44,6 +44,21 @@ npm run invoke:curl       # Hit deployed HTTP API
 
 Helper scripts live in `scripts/` (`invoke-all-local.sh`, `invoke-all-deployed.sh`, `curl-all.sh`).
 
+## Deploy
+
+```bash
+npm run deploy
+npm run info
+```
+
+Deploy scripts set `SLS_AWS_SDK=3` for AWS SDK v3 compatibility with Serverless v4. AWS credentials (local profile `taylorjg`) are required; Serverless v4 also needs `SERVERLESS_ACCESS_KEY`.
+
+## CI
+
+GitHub Actions runs `npm run check` on every push and pull request. The `check` job is required for merges to `main`.
+
+CI requires a repository secret named `SERVERLESS_ACCESS_KEY` for Serverless Framework v4 authentication.
+
 # Serverless Functions
 
 The backend comprises the following serverless functions:
