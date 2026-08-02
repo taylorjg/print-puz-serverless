@@ -6,9 +6,12 @@
   "scripts": {
     "deploy": "SLS_AWS_SDK=3 serverless deploy",
     "info": "SLS_AWS_SDK=3 serverless info",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "test": "vitest run",
-    "test:invoke-all": "bash test/invoke-all.sh",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
+    "invoke:local": "bash scripts/invoke-all-local.sh",
+    "invoke:deployed": "bash scripts/invoke-all-deployed.sh",
+    "invoke:curl": "bash scripts/curl-all.sh",
+    "check": "npm run lint && npm test && npm run invoke:local"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",

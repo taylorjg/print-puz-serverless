@@ -18,6 +18,32 @@ I have started work on a new frontend web app to consume these serverless functi
 - Repo: https://github.com/taylorjg/print-puz-react-vite
 - Deployed website: https://taylorjg.github.io/print-puz-react-vite/
 
+## Development
+
+```bash
+npm ci
+npm run lint              # ESLint (includes Prettier)
+npm test                  # Handler integration tests (live Private Eye website)
+npm run invoke:local      # Smoke-test all handlers via serverless invoke local
+npm run check             # lint + test + invoke:local (same as CI)
+```
+
+Post-deploy smoke tests (manual — requires AWS credentials and a deployed stack):
+
+```bash
+npm run invoke:deployed   # Invoke all deployed Lambdas
+npm run invoke:curl       # Hit deployed HTTP API
+```
+
+| Command | Network | Secrets / credentials |
+|---|---|---|
+| `npm test` | Yes (Private Eye) | None |
+| `npm run invoke:local` | Yes (Private Eye) | `SERVERLESS_ACCESS_KEY` for Serverless v4 CLI |
+| `npm run invoke:deployed` | Yes (Private Eye + AWS) | AWS profile + `SERVERLESS_ACCESS_KEY` |
+| `npm run invoke:curl` | Yes (deployed API) | None (uses URL in script) |
+
+Helper scripts live in `scripts/` (`invoke-all-local.sh`, `invoke-all-deployed.sh`, `curl-all.sh`).
+
 # Serverless Functions
 
 The backend comprises the following serverless functions:
@@ -35,7 +61,7 @@ The backend comprises the following serverless functions:
 ### Serverless CLI
 
 ```
-serverless invoke --function scrape-puzzle-url
+serverless invoke -f scrape-puzzle-url
 ```
 
 ### Curl
@@ -53,7 +79,7 @@ https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/scrape-puzzle-url
 ### Serverless CLI
 
 ```
-serverless invoke --function list-puzzles
+serverless invoke -f list-puzzles
 ```
 
 ### Curl
@@ -72,8 +98,8 @@ https://fr0r2wv048.execute-api.us-east-1.amazonaws.com/list-puzzles
 
 ```
 serverless invoke \
-  --function parse-puzzle \
-  --data '{
+  -f parse-puzzle \
+  -d '{
     "queryStringParameters": {
       "puzzleUrl": "https://www.private-eye.co.uk/pictures/crossword/download/753.puz"
     }
