@@ -1,3 +1,5 @@
+[![CI/CD](https://github.com/taylorjg/print-puz-serverless/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/taylorjg/print-puz-serverless/actions/workflows/ci-cd.yml)
+
 # Description
 
 A while ago, I wrote [a little web app](https://github.com/taylorjg/print-puz) to:
