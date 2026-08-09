@@ -12,7 +12,8 @@ const parsePuzzle = async (url) => {
   return readpuz(response.data);
 };
 
-const convertCharToMyFormat = (char) => (char === PUZ_BLOCK ? MY_BLOCK : MY_LETTER);
+const convertCharToMyFormat = (char) =>
+  char === PUZ_BLOCK ? MY_BLOCK : MY_LETTER;
 
 const convertLineToMyFormat = (line) => {
   const chars = Array.from(line);
@@ -41,7 +42,8 @@ const HYPHEN_MINUS = 0x2d;
 const convertEnDashToHyphenMinus = (ch) =>
   ch.codePointAt(0) === EN_DASH ? String.fromCodePoint(HYPHEN_MINUS) : ch;
 
-const fixDashes = (clue) => Array.from(clue).map(convertEnDashToHyphenMinus).join("");
+const fixDashes = (clue) =>
+  Array.from(clue).map(convertEnDashToHyphenMinus).join("");
 
 const computeNumberedSquares = (grid) => {
   const SIZE = grid.length;
@@ -125,42 +127,51 @@ const partitionClues = (grid, clues) => {
 };
 
 export async function handler(event) {
-  return U.wrapHandlerImplementation("/parse-puzzle", async (makeSpecialResponse) => {
-    const puzzleUrl = event.queryStringParameters?.puzzleUrl;
+  return U.wrapHandlerImplementation(
+    "/parse-puzzle",
+    async (makeSpecialResponse) => {
+      const puzzleUrl = event.queryStringParameters?.puzzleUrl;
 
-    if (!puzzleUrl) {
-      return makeSpecialResponse(400, "Missing puzzleUrl query string parameter");
-    }
+      if (!puzzleUrl) {
+        return makeSpecialResponse(
+          400,
+          "Missing puzzleUrl query string parameter"
+        );
+      }
 
-    console.info("puzzleUrl:", puzzleUrl);
+      console.info("puzzleUrl:", puzzleUrl);
 
-    try {
-      const puzzle = await parsePuzzle(puzzleUrl);
-      const grid = parseGrid(puzzle.state, puzzle.width);
-      const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
+      try {
+        const puzzle = await parsePuzzle(puzzleUrl);
+        const grid = parseGrid(puzzle.state, puzzle.width);
+        const { acrossClues, downClues } = partitionClues(grid, puzzle.clues);
 
-      const result = {
-        puzzleUrl,
-        puzzle,
-        grid,
-        acrossClues,
-        downClues,
-      };
-      console.info("result:", {
-        puzzleUrl: result.puzzleUrl,
-        title: result.puzzle.title,
-        width: result.puzzle.width,
-        height: result.puzzle.height,
-        acrossClueCount: result.acrossClues.length,
-        downClueCount: result.downClues.length,
-      });
-      return result;
-    } catch (error) {
-      if (error.response?.status === 404) {
-        return makeSpecialResponse(404, "Failed to find puzzle with given puzzleUrl");
-      } else {
-        throw error;
+        const result = {
+          puzzleUrl,
+          puzzle,
+          grid,
+          acrossClues,
+          downClues,
+        };
+        console.info("result:", {
+          puzzleUrl: result.puzzleUrl,
+          title: result.puzzle.title,
+          width: result.puzzle.width,
+          height: result.puzzle.height,
+          acrossClueCount: result.acrossClues.length,
+          downClueCount: result.downClues.length,
+        });
+        return result;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          return makeSpecialResponse(
+            404,
+            "Failed to find puzzle with given puzzleUrl"
+          );
+        } else {
+          throw error;
+        }
       }
     }
-  });
+  );
 }

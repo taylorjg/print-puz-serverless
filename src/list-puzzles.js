@@ -3,7 +3,9 @@ import * as C from "./constants";
 import * as U from "./serverless-utils";
 
 export const parseDownloadPage = async () => {
-  const response = await axios.get(`${C.PRIVATE_EYE_WEBSITE_URL}/pictures/crossword/download/`);
+  const response = await axios.get(
+    `${C.PRIVATE_EYE_WEBSITE_URL}/pictures/crossword/download/`
+  );
   const data = response.data;
   const regex = /[<]tr[>](.*?)[<][/]tr[>]/g;
   const matches = data.matchAll(regex);

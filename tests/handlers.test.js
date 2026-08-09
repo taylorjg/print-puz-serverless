@@ -4,7 +4,8 @@ import { handler as scrapePuzzleUrlHandler } from "../src/scrape-puzzle-url.js";
 import { handler as listPuzzlesHandler } from "../src/list-puzzles.js";
 import { handler as parsePuzzleHandler } from "../src/parse-puzzle.js";
 
-const SAMPLE_PUZZLE_URL = "https://www.private-eye.co.uk/pictures/crossword/download/833.puz";
+const SAMPLE_PUZZLE_URL =
+  "https://www.private-eye.co.uk/pictures/crossword/download/833.puz";
 
 const parseResponseBody = (response) => JSON.parse(response.body);
 

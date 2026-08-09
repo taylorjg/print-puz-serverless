@@ -11,13 +11,19 @@ export const scrapePuzzleUrl = async () => {
 };
 
 export async function handler() {
-  return U.wrapHandlerImplementation("/scrape-puzzle-url", async (makeSpecialResponse) => {
-    const puzzleUrl = await scrapePuzzleUrl();
-    if (puzzleUrl === null) {
-      return makeSpecialResponse(404, "Failed to find .puz url on current crossword page");
+  return U.wrapHandlerImplementation(
+    "/scrape-puzzle-url",
+    async (makeSpecialResponse) => {
+      const puzzleUrl = await scrapePuzzleUrl();
+      if (puzzleUrl === null) {
+        return makeSpecialResponse(
+          404,
+          "Failed to find .puz url on current crossword page"
+        );
+      }
+      const result = { puzzleUrl };
+      console.info("result:", result);
+      return result;
     }
-    const result = { puzzleUrl };
-    console.info("result:", result);
-    return result;
-  });
+  );
 }

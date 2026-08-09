@@ -27,9 +27,17 @@ export const extractErrorMessage = (error) => {
   return error.message;
 };
 
-export const wrapHandlerImplementation = async (endpointName, handlerImplementation) => {
+export const wrapHandlerImplementation = async (
+  endpointName,
+  handlerImplementation
+) => {
   try {
-    console.info("endpointName:", endpointName, "version:", packageJson.version);
+    console.info(
+      "endpointName:",
+      endpointName,
+      "version:",
+      packageJson.version
+    );
 
     let specialResponse = undefined;
     const makeSpecialResponse = (statusCode, error) => {

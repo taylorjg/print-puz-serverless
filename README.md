@@ -37,12 +37,12 @@ npm run invoke:deployed   # Invoke all deployed Lambdas
 npm run invoke:curl       # Hit deployed HTTP API
 ```
 
-| Command | Network | Secrets / credentials |
-|---|---|---|
-| `npm test` | Yes (Private Eye) | None |
-| `npm run invoke:local` | Yes (Private Eye) | `SERVERLESS_ACCESS_KEY` for Serverless v4 CLI |
-| `npm run invoke:deployed` | Yes (Private Eye + AWS) | AWS profile + `SERVERLESS_ACCESS_KEY` |
-| `npm run invoke:curl` | Yes (deployed API) | None (uses URL in script) |
+| Command                   | Network                 | Secrets / credentials                         |
+| ------------------------- | ----------------------- | --------------------------------------------- |
+| `npm test`                | Yes (Private Eye)       | None                                          |
+| `npm run invoke:local`    | Yes (Private Eye)       | `SERVERLESS_ACCESS_KEY` for Serverless v4 CLI |
+| `npm run invoke:deployed` | Yes (Private Eye + AWS) | AWS profile + `SERVERLESS_ACCESS_KEY`         |
+| `npm run invoke:curl`     | Yes (deployed API)      | None (uses URL in script)                     |
 
 Helper scripts live in `scripts/` (`invoke-all-local.sh`, `invoke-all-deployed.sh`, `curl-all.sh`).
 
